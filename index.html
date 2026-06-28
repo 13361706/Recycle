@@ -2,17 +2,17 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
-<title>回收報價系統V4</title>
+<title>回收營運系統V5</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1>♻️ 回收報價智慧系統 V4（實戰版）</h1>
+<h1>♻️ 回收營運系統 V5（紀錄版）</h1>
 
 <div class="box">
 
-<h2>📦 輸入資料</h2>
+<h2>📦 報價分析</h2>
 
 品項：
 <select id="item"></select><br><br>
@@ -23,14 +23,14 @@
 重量（kg）：
 <input id="weight" type="number"><br><br>
 
-競爭狀態：
+競爭：
 <select id="level">
-<option value="low">低（穩定貨源）</option>
-<option value="mid">中（一般市場）</option>
-<option value="high">高（有人搶貨）</option>
+<option value="low">低</option>
+<option value="mid">中</option>
+<option value="high">高</option>
 </select><br><br>
 
-<button onclick="analyze()">分析報價</button>
+<button onclick="analyze()">分析 + 存紀錄</button>
 
 </div>
 
@@ -39,8 +39,18 @@
 <div class="box">
 
 <h2>📊 分析結果</h2>
+<div id="result">尚未分析</div>
 
-<div id="result">請輸入資料</div>
+</div>
+
+<hr>
+
+<div class="box">
+
+<h2>🧾 今日紀錄</h2>
+<div id="log"></div>
+
+<h3 id="summary"></h3>
 
 </div>
 
