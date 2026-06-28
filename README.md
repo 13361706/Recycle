@@ -1,1 +1,44 @@
 # Recycle
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>回收收購系統</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>♻️ 回收收購管理系統</h1>
+
+<table>
+<tr>
+<th>品項</th>
+<th>上游價格</th>
+<th>模式</th>
+<th>你設定收購價</th>
+<th>公式扣價</th>
+<th>結果收購價</th>
+<th>利潤</th>
+</tr>
+
+<tbody id="tableBody"></tbody>
+</table>
+
+<hr>
+
+<h2>🧮 試算</h2>
+
+品項：
+<select id="itemSelect"></select><br><br>
+
+重量(kg)：
+<input id="weight" type="number"><br><br>
+
+<button onclick="calc()">計算</button>
+
+<h3 id="result"></h3>
+
+<script src="script.js"></script>
+</body>
+</html>
