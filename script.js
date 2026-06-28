@@ -11,13 +11,16 @@ const items = {
 
 const select = document.getElementById("item");
 
-// 初始化品項
+// 初始化
 for (let k in items) {
 let opt = document.createElement("option");
 opt.value = k;
 opt.innerText = k;
 select.appendChild(opt);
 }
+
+// 讀取紀錄
+let logs = JSON.parse(localStorage.getItem("logs") || "[]");
 
 function analyze() {
 
@@ -27,47 +30,72 @@ let weight = Number(document.getElementById("weight").value);
 let level = document.getElementById("level").value;
 
 if(!price || !weight){
-document.getElementById("result").innerHTML = "請輸入完整資料";
+alert("請輸入完整資料");
 return;
 }
 
-// 基礎係數（核心邏輯）
-let baseRate = 0.94;
+// 基礎係數
+let rate = 0.94;
 
-// 競爭調整
-if(level === "low") baseRate -= 0.02;   // 穩定：更保守
-if(level === "mid") baseRate += 0;      // 正常
-if(level === "high") baseRate += 0.02;  // 搶貨：提高
+// 競爭
+if(level === "low") rate -= 0.02;
+if(level === "high") rate += 0.02;
 
-// 重量調整
-if(weight > 1000) baseRate -= 0.02;
-else if(weight < 200) baseRate += 0.01;
+// 重量
+if(weight > 1000) rate -= 0.02;
+else if(weight < 200) rate += 0.01;
 
-// 限制範圍
-if(baseRate > 0.97) baseRate = 0.97;
-if(baseRate < 0.88) baseRate = 0.88;
+// 限制
+if(rate > 0.97) rate = 0.97;
+if(rate < 0.88) rate = 0.88;
 
 // 計算
-let buyPrice = Math.round(price * baseRate);
-let profit = price - buyPrice;
-let total = buyPrice * weight;
+let buy = Math.round(price * rate);
+let total = buy * weight;
+let profit = price - buy;
 
-let strategy = "";
-
-if(baseRate <= 0.90){
-strategy = "🔴 保守利潤（大貨/低風險）";
-} else if(baseRate <= 0.94){
-strategy = "🟡 穩定收貨（建議模式）";
-} else {
-strategy = "🟢 搶貨模式（提高競爭力）";
-}
-
+// 顯示結果
 document.getElementById("result").innerHTML = `
 <p>品項：${item}</p>
-<p>建議收購價：<b>${buyPrice}</b> 元/kg</p>
+<p>建議收購價：${buy} 元/kg</p>
 <p>利潤：${profit} 元/kg</p>
-<p>總成本：${total} 元</p>
-<p>策略判斷：${strategy}</p>
-<p>使用係數：${baseRate.toFixed(2)}</p>
+<p>總金額：${total} 元</p>
+<p>策略係數：${rate.toFixed(2)}</p>
 `;
+
+// 存紀錄
+let record = {
+item,
+price,
+weight,
+buy,
+total,
+profit,
+time: new Date().toLocaleString()
+};
+
+logs.push(record);
+localStorage.setItem("logs", JSON.stringify(logs));
+
+renderLogs();
 }
+
+function renderLogs() {
+
+let html = "";
+let totalMoney = 0;
+let totalWeight = 0;
+
+logs.forEach(l => {
+html += `<p>${l.time}｜${l.item}｜${l.weight}kg｜${l.buy}元｜${l.total}元</p>`;
+totalMoney += l.total;
+totalWeight += l.weight;
+});
+
+document.getElementById("log").innerHTML = html;
+
+document.getElementById("summary").innerHTML =
+`今日總金額：${totalMoney} 元｜總重量：${totalWeight} kg`;
+}
+
+renderLogs();
